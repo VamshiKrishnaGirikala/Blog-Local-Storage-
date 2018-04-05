@@ -123,7 +123,7 @@ jQuery("#container").on("click","button[id^='viewComm_']",function()
 commentsHtml+=`<div class="comments" id="comm_${postsComments[i].id}">
                     <p>${postsComments[i].body}</p>
               
-              <button id="delComm_${i}">Delete Comment!!</button>
+              <button id="delComm_${postsComments[i].id}">Delete Comment!!</button>
               <hr>
               </div>`
     }
@@ -192,45 +192,33 @@ jQuery("#container").on("click","button[id^='delComm_']",function(){
         // jQuery("#"+delComm_Id).remove();
         console.log(postsComments)
         //start here*****************************************************************************
-        // postsComments.splice(delCommArr_id,1)
-        
-        // for(commObj in commentsArray)
-        // {
-        //     // console.log(commArr);
-        //        console.log(commentsArray[commObj]);
-            
-        // }
-        
-        // commentsArray.splice(commentsArray[delCommArr_id],1)
-    //     // console.log(commentsArray);
-    //     localStorage.comments=JSON.stringify(commentsArray)
-        console.log(postsComments)
+        // postsComments.splice(delCommArr_id,1);
+// console.log(commentsArray.indexOf(commentsArray[delCommArr_id]))
+console.log(commentsArray)
+console.log(commentsArray[delCommArr_id])
+for(var i=0;i<commentsArray.length;i++)
+{
+    if(delCommArr_id==commentsArray[i].id)
+    {
+        console.log("hello");
+        commentsArray.splice(i,1);
     }
+}
+for(var i=0;i<postsComments.length;i++)
+{
+    if(delCommArr_id==postsComments[i].id)
+    {
+        postsComments.splice(i,1);
+        console.log(postsComments);
+    }
+}
 
-
-
-    // for(var i=0;i<commentsArray.length;i++)
-    //     {
-    //         if(commentsArray[i].id==delCommId)
-    //         {
-    //             // console.log(commentsArray[i].id)
-    //             commentsArray.splice(i,1);
-    //             console.log(postComments);
-    //             postComments.splice(i,1);
-    //             console.log(postComments)
-    //             console.log(commentsArray);
-    //             localStorage.comments=JSON.stringify(commentsArray);
-    //             console.log(postComments);
-    //             console.log(postComments.length);
-    //         }}
+jQuery("#"+delComm_Id).remove();
+        
+localStorage.comments=JSON.stringify(commentsArray);   
+    }
     
 })
-
-
-
-
-
-
 
 
 
@@ -254,10 +242,6 @@ jQuery("#upload").on("click",function(){
     usersArray.push(newUsersObj);
     console.log(usersArray);
     localStorage.users=JSON.stringify(usersArray);
-    
-    // console.log(postsArray);
-    // console.log(usersArray);
-    // console.log(commentsArray);
     var newPostHtml="";
     newPostHtml+=`<div class="posts" id="post_${postsArray.length}">
                 <h4>Name:${document.getElementById("name").value}</h4>
