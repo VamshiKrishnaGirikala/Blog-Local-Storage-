@@ -5,6 +5,7 @@ var usersArray;
 var postsHtml='';
 var commentsHtml="";
 var postsComments=[];
+var editForm='';
 //Button load data!!
 //******************
 jQuery("#getData").on("click",function(){
@@ -67,8 +68,8 @@ usersArray=JSON.parse(localStorage.users);
             {
                postsHtml+=`<div class="posts" id="post_${postsArray[i].id}">
                 <h4>Name:${usersArray[j].name}</h4>
-                <em><strong>Title: </strong>${postsArray[i].title}</em>
-                <p><strong>Post Description: </strong>${postsArray[i].body}</p>
+                <em id="title_${postsArray[i].id}"><strong>Title: </strong>${postsArray[i].title}</em>
+                <p id="body_${postsArray[i].id}"><strong>Post Description: </strong>${postsArray[i].body}</p>
                 <div id="buttons_${postsArray[i].id}">
                 <button id="viewComm_${postsArray[i].id}">View Comments</button>
                 <button id="editPost_${postsArray[i].id}">Edit Post</button>
@@ -118,7 +119,8 @@ jQuery("#container").on("click","button[id^='viewComm_']",function()
     }
     for(var i=0;i<postsComments.length;i++)
     {
-commentsHtml+=`<div class="comments" id="comm_${i}">
+        
+commentsHtml+=`<div class="comments" id="comm_${postsComments[i].id}">
                     <p>${postsComments[i].body}</p>
               
               <button id="delComm_${i}">Delete Comment!!</button>
@@ -152,9 +154,9 @@ jQuery("#container").on("click","button[id^='addComm_']",function(){
 }
     console.log(postsComments.length);
     
-addComment+=`<div class="comments" id="comm_${postsComments.length}">
+addComment+=`<div class="comments" id="comm_${commentsArray.length+1}">
                 <p>${document.getElementById("textComm").value}</p>
-                <button id="delComm_${postsComments.length}">Delete Comment!!</button>
+                <button id="delComm_${commentsArray.length+1}">Delete Comment!!</button>
                 <hr>
             </div>`;
 jQuery("#newComm").before(addComment)
@@ -162,7 +164,7 @@ jQuery("#newComm").before(addComment)
 console.log(addCommentObj)
 commentsArray.push(addCommentObj);
 console.log(commentsArray)
-postsComments.push(addCommentObj.body)
+postsComments.push({id:addCommentObj.id,body:addCommentObj.body})
 console.log(postsComments)
      document.getElementById("uname").value="";
      document.getElementById("email").value="";
@@ -191,7 +193,14 @@ jQuery("#container").on("click","button[id^='delComm_']",function(){
         console.log(postsComments)
         //start here*****************************************************************************
         // postsComments.splice(delCommArr_id,1)
-        console.log(commentsArray[commentsArray[delCommArr_id].id])
+        
+        // for(commObj in commentsArray)
+        // {
+        //     // console.log(commArr);
+        //        console.log(commentsArray[commObj]);
+            
+        // }
+        
         // commentsArray.splice(commentsArray[delCommArr_id],1)
     //     // console.log(commentsArray);
     //     localStorage.comments=JSON.stringify(commentsArray)
@@ -295,6 +304,51 @@ jQuery("#container").on("click","button[id^='deletePost_']",function(){
 jQuery("#container").on("click","button[id^='editPost_']",function(){
     var editBtn=jQuery(this).attr('id');
     console.log(editBtn);
+    var editBtn_Num=Number(editBtn.substring(9));
+    console.log(editBtn_Num)
     console.log(jQuery("#"+editBtn).parent().parent().attr('id'));
     var editPost_Id=jQuery("#"+editBtn).parent().parent().attr('id');
+    editForm='';
+    console.log(editPost_Id.replace("post_","editPost_"))
+    if(jQuery("#post_"+editBtn.substring(9)).has(jQuery("#editForm")))
+    {
+        jQuery("#editForm").remove();
+    }
+    if(editBtn==editPost_Id.replace("post_","editPost_"))
+    {
+        
+        editForm+=`<div id="editForm">
+        <h3>Edit Post</h3>
+        <div><input  style="width:300px;height:50px" id="edit_postTitle" type="text" placeholder="Enter post title"></div><br>
+        <textarea style="width:300px;height:100px" id="edit_body" placeholder="Enter post"></textarea> <br>
+        <button id="edit_sub">Update</button>
+        </div>`
+        jQuery("#buttons_"+editBtn.substring(9)).append(editForm);
+        
+        
+        jQuery("#edit_sub").on("click",function(){
+        console.log("hello");
+        for(var i=0;i<postsArray.length;i++)
+{
+    if(editBtn_Num==postsArray[i].id)
+    {
+        
+        postsArray[i].title=document.getElementById("edit_postTitle").value;
+        postsArray[i].body=document.getElementById("edit_body").value;
+        document.getElementById("edit_postTitle").value="";
+        document.getElementById("edit_body").value="";
+        console.log(document.getElementById("title_"+editBtn_Num).innerHTML)
+        document.getElementById("title_"+editBtn_Num).innerHTML="<strong>Title: </strong>"+postsArray[i].title;
+        document.getElementById("body_"+editBtn_Num).innerHTML="<strong>Title: </strong>"+postsArray[i].body;
+        console.log(postsArray[i]);
+        localStorage.posts=JSON.stringify(postsArray);
+        console.log(localStorage.posts);
+          
+    }
+}
+        })
+    }
+    
+    
 })
+
