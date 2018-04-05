@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BLOG</title>
+    <style>
+    #container{
+        margin:0 auto;
+        width:90%;
+        height:100%;
+        background-color: rgb(202, 198, 198);
+    }
+    #mainHeading{
+        text-align: center;
+        padding:20px;
+    }
+    #newForm,.posts{
+        
+        margin: 30px;
+        background-color: white;
+        padding:20px;
+        box-shadow: 5px 10px 18px #888888;
+        
+    }
+     #post{
+        width:300px;
+        height:100px;
+    }
+    
+    </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+
+
+
+
+    <div id="container">  
+        <h1 id="mainHeading">Blog Post</h1>
+        <button id="getData">Fetch Data</button>
+        <div id="newForm">
+            <h3>Create New Post!!</h3>
+            <input type="number" placeholder="Enter userId" id="userId"><br><br>
+            <input type="text" placeholder="Enter your name" id="name"><br><br>
+            <input type="text" placeholder="Enter title" id="title"><br><br>
+            <textarea placeholder="Enter the post" id="post"></textarea><br><br>
+            <button id="upload">Submit</button>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <script src="app.js"></script>
+</body>
+</html>
