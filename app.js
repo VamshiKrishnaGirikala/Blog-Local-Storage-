@@ -6,6 +6,11 @@ var postsHtml='';
 var commentsHtml="";
 var postsComments=[];
 var editForm='';
+var len=20;
+if(localStorage.length!=0)
+{
+    jQuery("#getData").css({'display':'none'});
+}
 //Button load data!!
 //******************
 jQuery("#getData").on("click",function(){
@@ -45,29 +50,72 @@ loadData();
 }
 })
 
-if(localStorage.length!=0)
-{
-    jQuery("#getData").css({'display':'none'});
 
+//*********************
+//Debounce
+//*********************
+function debounce(func, wait, immediate) {
+	var timeout;
+	return function() {
+		var context = this, args = arguments;
+		var later = function() {
+			timeout = null;
+			if (!immediate) func.apply(context, args);
+		};
+		var callNow = immediate && !timeout;
+		clearTimeout(timeout);
+		timeout = setTimeout(later, wait);
+		if (callNow) func.apply(context, args);
+	};
+};
+// ************************
+// scroll
+// ************************
+var scroll_slow=debounce(function(){
+    console.log("hello");
+    var cntr=document.getElementById("container");
+    var contentHeight=cntr.offsetHeight;
+    console.log(contentHeight);
+    var yOffSet=window.pageYOffset;
+    var y=yOffSet+window.innerHeight;
+    if(y>contentHeight)
+    {
+        if(len<postsArray.length)
+       {
+        len+=20;
+       } 
+       else{
+           len=postsArray.length;
+           window.removeEventListener("scroll",scroll_slow);
+       }
+        
+        loadData();
+    }
     
+},50);
+window.addEventListener("scroll",scroll_slow);
+
 loadData();
 
-}
+
 //Display all posts:
 //************loadData function **************//
 function loadData()
 {
- postsArray=JSON.parse(localStorage.posts);
+    postsHtml="";
+    if (localStorage.length != 0) 
+    {
+     postsArray=JSON.parse(localStorage.posts);
 commentsArray=JSON.parse(localStorage.comments);
 usersArray=JSON.parse(localStorage.users);
-    for(var i=0;i<postsArray.length;i++)
+    for(var i=0;i<len;i++)
     {
         for(var j=0;j<usersArray.length;j++)
         {
-            if(postsArray[i].userId==usersArray[j].id)
+            if(usersArray[j].id==postsArray[i].userId)
             {
                postsHtml+=`<div class="posts" id="post_${postsArray[i].id}">
-                <h4>Name:${usersArray[j].name}</h4>
+                <h4>Name:${usersArray[j].name},${i}</h4>
                 <em id="title_${postsArray[i].id}"><strong>Title: </strong>${postsArray[i].title}</em>
                 <p id="body_${postsArray[i].id}"><strong>Post Description: </strong>${postsArray[i].body}</p>
                 <div id="buttons_${postsArray[i].id}">
@@ -79,7 +127,9 @@ usersArray=JSON.parse(localStorage.users);
             }   
         }
     }
-    jQuery("#newForm").after(postsHtml);
+    document.getElementById("postsContainer").innerHTML=postsHtml;
+    // jQuery("#newForm").after(postsHtml);
+}
 }
 //*************************************************
 //View Comments
@@ -189,11 +239,8 @@ jQuery("#container").on("click","button[id^='delComm_']",function(){
     console.log(delComm_rep);
     if(delCommBtn_Id==delComm_rep)
     {
-        // jQuery("#"+delComm_Id).remove();
-        console.log(postsComments)
-        //start here*****************************************************************************
-        // postsComments.splice(delCommArr_id,1);
-// console.log(commentsArray.indexOf(commentsArray[delCommArr_id]))
+        console.log(postsComments);
+  
 console.log(commentsArray)
 console.log(commentsArray[delCommArr_id])
 for(var i=0;i<commentsArray.length;i++)
@@ -219,9 +266,6 @@ localStorage.comments=JSON.stringify(commentsArray);
     }
     
 })
-
-
-
 //***************************** 
 //Create Post:
 //*****************************
@@ -278,9 +322,6 @@ jQuery("#container").on("click","button[id^='deletePost_']",function(){
             jQuery("#post_"+delPost).remove();
         }
     }
-    
-
-    // var delPost_Id=delPost.replace("deletePost","post")
 })
 //**********************************
 //Edit Post
@@ -300,7 +341,6 @@ jQuery("#container").on("click","button[id^='editPost_']",function(){
     }
     if(editBtn==editPost_Id.replace("post_","editPost_"))
     {
-        
         editForm+=`<div id="editForm">
         <h3>Edit Post</h3>
         <div><input  style="width:300px;height:50px" id="edit_postTitle" type="text" placeholder="Enter post title"></div><br>
@@ -309,14 +349,15 @@ jQuery("#container").on("click","button[id^='editPost_']",function(){
         </div>`
         jQuery("#buttons_"+editBtn.substring(9)).append(editForm);
         
-        
+        //*****************
+        //Submit Post!!
+        //*****************
         jQuery("#edit_sub").on("click",function(){
         console.log("hello");
         for(var i=0;i<postsArray.length;i++)
 {
     if(editBtn_Num==postsArray[i].id)
     {
-        
         postsArray[i].title=document.getElementById("edit_postTitle").value;
         postsArray[i].body=document.getElementById("edit_body").value;
         document.getElementById("edit_postTitle").value="";
@@ -335,4 +376,3 @@ jQuery("#container").on("click","button[id^='editPost_']",function(){
     
     
 })
-
