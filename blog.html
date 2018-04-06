@@ -10,6 +10,7 @@
         margin:0 auto;
         width:90%;
         height:100%;
+        /* overflow: scroll; */
         background-color: rgb(202, 198, 198);
     }
     #mainHeading{
@@ -24,29 +25,40 @@
         box-shadow: 5px 10px 18px #888888;
         
     }
-     #post{
-        width:300px;
-        height:100px;
-    }
+    
     
     </style>
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js"></script>
 </head>
 <body>
 
-
+        <div class="ui form">
+                
 
 
     <div id="container">  
         <h1 id="mainHeading">Blog Post</h1>
         <button id="getData">Fetch Data</button>
-        <div id="newForm">
+        <div id="newForm" class="ui form">
             <h3>Create New Post!!</h3>
             <input type="number" placeholder="Enter userId" id="userId"><br><br>
             <input type="text" placeholder="Enter your name" id="name"><br><br>
             <input type="text" placeholder="Enter title" id="title"><br><br>
-            <textarea placeholder="Enter the post" id="post"></textarea><br><br>
-            <button id="upload">Submit</button>
+            <div class="field">
+                    <textarea placeholder="Enter the post" id="post"></textarea><br><br>    
+                </div>
+            
+            <button id="upload" class="ui vertical animated blue basic button" tabindex="0">
+                    <div class="hidden content">
+                            <i class="share icon"></i>
+                    </div>
+                    <div class="visible content">
+                      Post
+                    </div></button>
+            
         </div>
         <div id="postsContainer"></div>
     </div>

@@ -1,4 +1,5 @@
-
+//************************
+//Form Validation to be done:
 var postsArray;
 var commentsArray;
 var usersArray;
@@ -92,7 +93,7 @@ var scroll_slow=debounce(function(){
         loadData();
     }
     
-},50);
+},10);
 window.addEventListener("scroll",scroll_slow);
 
 loadData();
@@ -114,14 +115,34 @@ usersArray=JSON.parse(localStorage.users);
         {
             if(usersArray[j].id==postsArray[i].userId)
             {
-               postsHtml+=`<div class="posts" id="post_${postsArray[i].id}">
-                <h4>Name:${usersArray[j].name},${i}</h4>
+               postsHtml+=`<div class="posts " id="post_${postsArray[i].id}">
+                <h4>Name:${usersArray[j].name}</h4>
                 <em id="title_${postsArray[i].id}"><strong>Title: </strong>${postsArray[i].title}</em>
                 <p id="body_${postsArray[i].id}"><strong>Post Description: </strong>${postsArray[i].body}</p>
                 <div id="buttons_${postsArray[i].id}">
-                <button id="viewComm_${postsArray[i].id}">View Comments</button>
-                <button id="editPost_${postsArray[i].id}">Edit Post</button>
-                <button id="deletePost_${postsArray[i].id}">Delete Post</button>
+                <button class="ui vertical animated blue basic button" tabindex="0" id="viewComm_${postsArray[i].id}">
+                <div class="hidden content">
+                <i class="comment icon"></i>
+        </div>
+        <div class="visible content">
+        View Comments
+        </div></button>
+                <button class="ui vertical animated blue basic button" tabindex="0" id="editPost_${postsArray[i].id}">
+                    <div class="hidden content">
+                        <i class="edit icon"></i>
+                    </div>
+                    <div class="visible content">
+                        Edit Post
+                    </div>
+                </button>
+                <button class="ui vertical animated red basic button "  tabindex="0" id="deletePost_${postsArray[i].id}">
+                <div class="hidden content">
+                        <i class="trash icon"></i>
+                    </div>
+                    <div class="visible content">
+                    Delete Post
+                    </div>
+                </button>
                 </div>
                </div> ` 
             }   
@@ -173,15 +194,30 @@ jQuery("#container").on("click","button[id^='viewComm_']",function()
 commentsHtml+=`<div class="comments" id="comm_${postsComments[i].id}">
                     <p>${postsComments[i].body}</p>
               
-              <button id="delComm_${postsComments[i].id}">Delete Comment!!</button>
+              <button class="ui vertical animated red basic button" tabindex="0" id="delComm_${postsComments[i].id}">
+              <div class="hidden content">
+              <i class="trash icon"></i>
+          </div>
+          <div class="visible content">
+          Delete Comment
+          </div>
+              </button>
               <hr>
               </div>`
     }
-    commentsHtml+=`<div id="newComm">
+    commentsHtml+=`<div id="newComm" class="ui form">
+    <h3>Add Comment</h3>
     <input id="uname" type="text" placeholder="Enter your name" required><br><br>
     <input id="email" type="email" placeholder="Enter your email-id" required><br/><br>
     <textarea id="textComm" type="text" placeholder="Enter your comment" required></textarea><br><br>
-    <button id="addComm_${viewComm_Id}">Add New Comment!!</button></div>`;
+    <button class="ui vertical animated blue basic button" tabindex="0" id="addComm_${viewComm_Id}">
+    <div class="hidden content">
+              <i class="plus icon"></i>
+          </div>
+          <div class="visible content">
+          Add New Comment!!
+          </div>
+    </button></div>`;
     jQuery("#"+btn_Id).after(commentsHtml);
 
 
@@ -341,11 +377,18 @@ jQuery("#container").on("click","button[id^='editPost_']",function(){
     }
     if(editBtn==editPost_Id.replace("post_","editPost_"))
     {
-        editForm+=`<div id="editForm">
+        editForm+=`<div id="editForm" class="ui form">
         <h3>Edit Post</h3>
-        <div><input  style="width:300px;height:50px" id="edit_postTitle" type="text" placeholder="Enter post title"></div><br>
-        <textarea style="width:300px;height:100px" id="edit_body" placeholder="Enter post"></textarea> <br>
-        <button id="edit_sub">Update</button>
+        <div><input id="edit_postTitle" type="text" placeholder="Enter post title"></div><br>
+        <textarea id="edit_body" placeholder="Enter post"></textarea> <br>
+        <button id="edit_sub" class="ui vertical animated button" tabindex="0">
+        <div class="hidden content">
+        <i class="sync icon"></i>
+        </div>
+        <div class="visible content">
+        Update
+        </div>
+        </button>
         </div>`
         jQuery("#buttons_"+editBtn.substring(9)).append(editForm);
         
